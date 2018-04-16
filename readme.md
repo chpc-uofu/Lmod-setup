@@ -84,3 +84,45 @@ However, note that if the user loads the dependent module (here `hdf5`) before, 
 
 #### Prerequisite definition
 
+### Module properties via labels
+
+Modules can be labelled for different groupings. [http://lmod.readthedocs.io/en/latest/145_properties.html#lmodrc-label](http://lmod.readthedocs.io/en/latest/145_properties.html#lmodrc-label) There are two default labels:
+
+#### State
+
+`experimental`,`testing`,`obsolete`. 
+
+I propose to mark older version obsolete, AND potentially hide them (list them as hidden in `/uufs/chpc.utah.edu/sys/modulefiles/etc/rc`):
+```
+add_property("state","obsolete")
+```
+
+#### Architecture
+
+`gpu`,`mic`,...
+
+For our purposes we should mark GPU built packages with this label, e.g.
+```
+add_property("arch","gpu")
+```
+
+### Family
+
+Defines that only one module in a family can be loaded at a time, e.g.
+
+```
+family("R")
+```
+List of families:
+R, Python, CUDA
+
+### Module versions and aliases
+
+We can create shorter version or an alias for a module by a definition in `/uufs/chpc.utah.edu/sys/modulefiles/etc/rc`.  This is recommended for modules with long versions or where versions differ significantly, e.g.:
+```
+ module-version intel/2018.1.163 18.1 18
+ module-version intel/2018.0.128 18.0 
+ module-version lumerical/8.19.1466 8.19 2018a 18a
+ module-alias python2 python/2.7.11
+ module-alias python3 python/3.5.2
+```
