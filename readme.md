@@ -13,6 +13,7 @@ We should strive to keep the module format somewhat consistent. Each module file
 It is advantageous to define the package version first since the module file can then refer to this throughout the module file, e.g.
 ```
 local version = "18.1"
+local base = pathJoin("/uufs/chpc.utah.edu/sys/installdir/pgi", version)
 ```
 
 ### Help section
@@ -45,11 +46,12 @@ for the netCDF-c package (v.4.4.1) for Centos7
 
 ### Description section
 
-Description defines some tags associated with the module, e.g.
+Description defines some tags associated with the module, which can be used in searching, e.g.:
 ```
 whatis("Name: PGI Compilers")
 whatis("Version: " .. version)
 whatis("Category: compiler")
+whatis("Description  : Compiler (C, C++, Fortran)")
 whatis("Keywords: System, compiler")
 whatis("URL: http://www.pgroup.com/")
 whatis("Installed on 2/26/2018")
@@ -67,6 +69,10 @@ setenv("NETCDFC",base)
 setenv("NETCDFC_INCDIR",pathJoin(base,"/include"))
 setenv("NETCDFC_LIBDIR",pathJoin(base,"/lib"))
 ```
+
+## Other module file format features
+
+All Lua module file functions are listed at [http://lmod.readthedocs.io/en/latest/050_lua_modulefiles.html](http://lmod.readthedocs.io/en/latest/050_lua_modulefiles.html).
 
 ### Dependencies
 
