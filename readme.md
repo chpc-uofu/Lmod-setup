@@ -34,6 +34,7 @@ To run module commands without using the cache:
 ```
 $ module --ignore_cache avail
 ```
+(Note - the caching does not seem to work in the currently active Lmod version, 7.1.6, but it works in the testing version, 7.7.29. Not sure why is that but I am leaving it as is and will check again when 7.7.29 is made active).
 
 ## <a name="moduleformat"></a>Module file format
 
@@ -107,19 +108,28 @@ All Lua module file functions are listed at [http://lmod.readthedocs.io/en/lates
 
 ### Dependencies
 
-Dependencies can be included in several different ways
+Dependencies can be included in several different ways. See [http://lmod.readthedocs.io/en/latest/098_dependent_modules.html](http://lmod.readthedocs.io/en/latest/098_dependent_modules.html) for details. Most common possibilities are summarized below.
 
 #### Hierarchy
 
+We handle direct dependencies on compilers, MPI, CUDA and potentially other packages (Python, R) via hierarchy. Compilers and MPI should be always done this way, for other tools only if they dont depend on a compiler and MPI (e.g. if we have a MPI parallel CUDA code, the MPI dependency will be handled by the hierarchy and CUDA dependency explicitly in one of the way below).
+
+#### Use of RPATH
+
+In general the best approach for library dependencies is hardcoding the dynamic library path in the executable via RPATH, i.e. linking as
+```
+-Lmy_lib_path -lmy_lib -Wl,-rpath=my_lib_path
+```
+
 #### Explicit loading
 
-This loads the dependent module upon loading and unloads it when unloading, e.g.
+For dependencies that require other things than dynamic libraries (e.g. executables from bin directory), the best option for explicit loading is `depends_on()`. Using that will load the dependent module if its not loaded yet, unload when the original module is unloaded, but keep the dependent module if it has been loaded earlier.
 ```
-load("hdf5/1.8.17")
+depends_on("hdf5/1.8.17")
 ```
-However, note that if the user loads the dependent module (here `hdf5`) before, it gets unloaded when the module that contains the `load` statement gets unloaded.
-
 #### Prerequisite definition
+
+For expert users, we may use the `prereq()` function. If the dependent module is not loaded, loading a module with `prereq()` will error out with a message that the prerequisite module has not been loaded. This leaves the dependency handling on the user.
 
 ### Module properties via labels
 
