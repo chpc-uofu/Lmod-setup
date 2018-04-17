@@ -2,7 +2,38 @@
 
 ## Modules setup
 
-To be added
+We have a specific installation strategy for Lmod in order to have different versions to co-exist in the sys branch. We follow the installation instructions at [http://lmod.readthedocs.io/en/latest/030_installing.html](http://lmod.readthedocs.io/en/latest/030_installing.html), but, with a twist.
+
+* Download the Lmod source to the srcdir
+* make the cache directories, e.g.
+```
+$ mkdir -p /uufs/chpc.utah.edu/sys/installdir/lmod/systemfiles/7.7-c7/
+$ touch /uufs/chpc.utah.edu/sys/installdir/lmod/systemfiles/7.7-c7/system.txt
+$ mkdir -p /uufs/chpc.utah.edu/sys/installdir/lmod/cache/7.7-c7
+```
+* In srcdir, configure and preinstall:
+```
+$ ./configure --prefix=/uufs/chpc.utah.edu/sys/installdir --with-module-root-path=/uufs/chpc.utah.edu/sys/modulefiles/CHPC-c7 --with-spiderCacheDir=/uufs/chpc.utah.edu/sys/installdir/lmod/cache/7.7-c7 --with-updateSystemFn=/uufs/chpc.utah.edu/sys/installdir/lmod/systemfiles/7.7-c7/system.txt --with-colorize=YES --with-tcl=YES --with-autoSwap=YES --with-useDotFiles=YES --with-mpathSearch=yes
+$ make pre-install
+```
+* Modify the installed files to replace `lmod/lmod` references. This allows us to run lmod directly from the given version directory (in this case 7.7.29):
+```
+$ grep -rl "lmod\/lmod" * | xargs sed -i 's/lmod\/lmod/lmod\/7.7.29/g'
+```
+* Modify `libexec/SitePackage.lua` - use the file from older version to add hooks for module load logging and for licensed programs checks
+* Test the new Lmod installation - this requires unloading the existing Lmod and starting the new one in an user shell. We have examples of scripts that do thia, e.g. `/uufs/chpc.utah.edu/sys/modulefiles/scripts/switch_to_18.csh`. Dont forget to source the file so that changes take effect.
+* When ready to deploy, modify `/uufs/chpc.utah.edu/sys/etc/profile.d/module.[csh,sh]` to change the Lmod version to source
+
+### System spider cache
+
+We are using cache, which is being put to `/uufs/chpc.utah.edu/sys/installdir/lmod/cache`, different location for different Lmod version (or, better to say, different locations of our module files). More info on this is at [http://lmod.readthedocs.io/en/latest/130_spider_cache.html](http://lmod.readthedocs.io/en/latest/130_spider_cache.html).
+
+Our particular setup involves running `/uufs/chpc.utah.edu/sys/modulefiles/scripts/caching/update_cache-c7.sh`. We should try to run this as a cron job.
+
+To run module commands without using the cache:
+```
+$ module --ignore_cache avail
+```
 
 ## Module file format
 
