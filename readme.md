@@ -35,7 +35,7 @@ To run module commands without using the cache:
 $ module --ignore_cache avail
 ```
 
-## Module file format
+## <a name="moduleformat"></a>Module file format
 
 We should strive to keep the module format somewhat consistent. Each module file should contain the following:
 
