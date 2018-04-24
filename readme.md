@@ -125,7 +125,7 @@ In general the best approach for library dependencies is hardcoding the dynamic 
 
 For dependencies that require other things than dynamic libraries (e.g. executables from bin directory), the best option for explicit loading is `depends_on()`. Using that will load the dependent module if its not loaded yet, unload when the original module is unloaded, but keep the dependent module if it has been loaded earlier.
 ```
-depends_on("hdf5/1.8.17")
+depends_on("cuda/9.1")
 ```
 #### Prerequisite definition
 
@@ -152,6 +152,11 @@ For our purposes we should mark GPU built packages with this label, e.g.
 ```
 add_property("arch","gpu")
 ```
+I have also defined a new property, `host`, which should be used for packages which have been built both for GPU and CPU (host):
+```
+add_property("arch","gpu:host")
+```
+
 
 ### Family
 
@@ -161,7 +166,18 @@ Defines that only one module in a family can be loaded at a time, e.g.
 family("R")
 ```
 List of families:
-R, Python, CUDA
+* Compiler 
+* mpi
+* R - own built R or OpenR
+* Python - own built, Anaconda, Intel Python
+* hdf5 - hdf5, phdf5
+* boost - boost, pboost
+* java - Oracle or OpenJDK
+* matlab - in case package uses old Matlab for which we dont have modules and have hard coded paths (delft3dvis)
+* idl - potential similar need to matlab above
+
+Questionable families:
+libflame, scala, cuda, julia, spark, gromacs, hoomd
 
 ### Module versions and aliases
 
