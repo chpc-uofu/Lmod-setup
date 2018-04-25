@@ -50,6 +50,13 @@ $ module --ignore_cache avail
 ```
 (Note - the caching does not seem to work in the currently active Lmod version, 7.1.6, but it works in the testing version, 7.7.29. Not sure why is that but I am leaving it as is and will check again when 7.7.29 is made active).
 
+### Environment variables 
+
+Lets consider to change the following [environment variables](http://lmod.readthedocs.io/en/latest/090_configuring_lmod.html), which modify Lmods behavior:
+```
+LMOD_PIN_VERSIONS - default - no - may want to set to yes to module restore the same versions of modules which were used with module save.
+LMOD_SHORTTIME - default - 2 - set to large value (86400) to prevent user spider cache to be generated - TURN THIS ON when auto cache generation is functional.
+
 ## <a name="moduleformat"></a>Module file format
 
 We should strive to keep the module format somewhat consistent. Each module file should contain the following:
