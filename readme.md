@@ -1,6 +1,8 @@
 # CHPCs Lmod 
-[Modules setup](#modulesetup)
-[Module file format](#moduleformat)
+* [Modules setup](#modulesetup)
+** [System spider cache](#scache)
+
+* [Module file format](#moduleformat)
 
 ## <a name="modulesetup"></a>Modules setup
 
@@ -26,7 +28,7 @@ $ grep -rl "lmod\/lmod" * | xargs sed -i 's/lmod\/lmod/lmod\/7.7.29/g'
 * Test the new Lmod installation - this requires unloading the existing Lmod and starting the new one in an user shell. We have examples of scripts that do thia, e.g. `/uufs/chpc.utah.edu/sys/modulefiles/scripts/switch_to_18.csh`. Dont forget to source the file so that changes take effect.
 * When ready to deploy, modify `/uufs/chpc.utah.edu/sys/etc/profile.d/module.[csh,sh]` to change the Lmod version to source
 
-### System spider cache
+### <a name="scache"></a>System spider cache
 
 We are using cache, which is being put to `/uufs/chpc.utah.edu/sys/installdir/lmod/cache`, different location for different Lmod version (or, better to say, different locations of our module files). More info on this is at [http://lmod.readthedocs.io/en/latest/130_spider_cache.html](http://lmod.readthedocs.io/en/latest/130_spider_cache.html).
 
