@@ -11,8 +11,8 @@
     * [Dependencies](#depend)
     * [Module properties](#prop)
     * [Family](#family)
+    * [Defining aliases in the module files](#alias)
     * [Module hiding, versions and aliase](#ver)
-    * [](#)
 
 ## <a name="modulesetup"></a>Modules setup
 
@@ -196,6 +196,18 @@ List of families:
 Questionable families:
 libflame, scala, cuda, julia, spark, gromacs, hoomd
 
+### <a name="alias"></a>Defining aliases in the module files
+
+Command aliases are useful, and Lmod defines `set_alias()` function for that purpose. However, aliases dont get expanded in bash non-interactive (e.g. job scripts) shells. Therefore, instead of using `set_alias()` function in the module files, we should use shell functions using the `set_shell_function()` function. Furthermore, in Bash, we need to `export` the newly created shell function. Therefore, the whole alias creation of `newcmd` pointing to `oldcmd` is as follows:
+```
+local bashStr = 'orgcmd "$@")'
+local cshStr  = "orgcmd $*`"
+set_shell_function("newcmd",bashStr,cshStr)
+if (myShellName() == "bash") then
+ execute{cmd="export -f newcmd",modeA={"load"}}
+end
+```
+The `execute` function runs a given command `cmd` in a given Lmod mode `modeA` - in this case it will export the newcmd function when the module is loaded.
 ### <a name="ver"></a>Module hiding, versions and aliases
 
 We can create shorter version or an alias for a module by a definition in `/uufs/chpc.utah.edu/sys/modulefiles/etc/rc`.  This is recommended for modules with long versions or where versions differ significantly, e.g.:
