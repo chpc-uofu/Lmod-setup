@@ -90,6 +90,8 @@ whatis("Installed on 2/26/2018")
 ```
 Note that we are using the `version` variable defined at the start.
 
+For Keywords, lets use the Tags used in the Application database, which are listed in [Tags.csv](Tags.csv). The application database categories, defined in [Categories.csv](Categories.csv), are not very detailed, but, it may not be a bad idea to start using that so we can potentially in the future group the modules based on these categories. We may expand the Applications, though, for different fields of science.
+
 ### Environmental variables
 
 We usually need to define PATH and other variables, and, when practical we should also define an environmental variable that specifies the package location and include/library location, e.g.
@@ -175,6 +177,7 @@ List of families:
 * java - Oracle or OpenJDK
 * matlab - in case package uses old Matlab for which we dont have modules and have hard coded paths (delft3dvis)
 * idl - potential similar need to matlab above
+* gaussian 
 
 Questionable families:
 libflame, scala, cuda, julia, spark, gromacs, hoomd
