@@ -3,6 +3,16 @@
     * [System spider cache](#scache)
 
 * [Module file format](#moduleformat)
+    * [Version variable](#version)
+    * [Help section](#help)
+    * [Description section](#whatis)
+    * [Environment variables](#env)
+* [Other module file format features](#moduleformatother)
+    * [Dependencies](#depend)
+    * [Module properties](#prop)
+    * [Family](#family)
+    * [Module hiding, versions and aliase](#ver)
+    * [](#)
 
 ## <a name="modulesetup"></a>Modules setup
 
@@ -44,7 +54,7 @@ $ module --ignore_cache avail
 
 We should strive to keep the module format somewhat consistent. Each module file should contain the following:
 
-### Version variable
+### <a name="version"></a>Version variable
 
 It is advantageous to define the package version first since the module file can then refer to this throughout the module file, e.g.
 ```
@@ -52,7 +62,7 @@ local version = "18.1"
 local base = pathJoin("/uufs/chpc.utah.edu/sys/installdir/pgi", version)
 ```
 
-### Help section
+### <a name="help"></a>Help section
 
 We need to agree on a format. I feel that some help pages are too long, e.g.
 ```
@@ -80,7 +90,7 @@ for the netCDF-c package (v.4.4.1) for Centos7
 
 ```
 
-### Description section
+### <a name="whatis"></a>Description section
 
 Description defines some tags associated with the module, which can be used in searching, e.g.:
 ```
@@ -96,7 +106,7 @@ Note that we are using the `version` variable defined at the start.
 
 For Keywords, lets use the Tags used in the Application database, which are listed in [Tags.csv](Tags.csv). The application database categories, defined in [Categories.csv](Categories.csv), are not very detailed, but, it may not be a bad idea to start using that so we can potentially in the future group the modules based on these categories. We may expand the Applications, though, for different fields of science.
 
-### Environmental variables
+### <a name="env"></a>Environmental variables
 
 We usually need to define PATH and other variables, and, when practical we should also define an environmental variable that specifies the package location and include/library location, e.g.
 ```
@@ -108,40 +118,40 @@ setenv("NETCDFC_INCDIR",pathJoin(base,"/include"))
 setenv("NETCDFC_LIBDIR",pathJoin(base,"/lib"))
 ```
 
-## Other module file format features
+## <a name="moduleformatother"></a>Other module file format features
 
 All Lua module file functions are listed at [http://lmod.readthedocs.io/en/latest/050_lua_modulefiles.html](http://lmod.readthedocs.io/en/latest/050_lua_modulefiles.html).
 
-### Dependencies
+### <a name="depend"></a>Dependencies
 
 Dependencies can be included in several different ways. See [http://lmod.readthedocs.io/en/latest/098_dependent_modules.html](http://lmod.readthedocs.io/en/latest/098_dependent_modules.html) for details. Most common possibilities are summarized below.
 
-#### Hierarchy
+#### <a name="hier"></a>Hierarchy
 
 We handle direct dependencies on compilers, MPI, CUDA and potentially other packages (Python, R) via hierarchy. Compilers and MPI should be always done this way, for other tools only if they dont depend on a compiler and MPI (e.g. if we have a MPI parallel CUDA code, the MPI dependency will be handled by the hierarchy and CUDA dependency explicitly in one of the way below).
 
-#### Use of RPATH
+#### <a name=""></a>Use of RPATH
 
 In general the best approach for library dependencies is hardcoding the dynamic library path in the executable via RPATH, i.e. linking as
 ```
 -Lmy_lib_path -lmy_lib -Wl,-rpath=my_lib_path
 ```
 
-#### Explicit loading
+#### <a name=""></a>Explicit loading
 
 For dependencies that require other things than dynamic libraries (e.g. executables from bin directory), the best option for explicit loading is `depends_on()`. Using that will load the dependent module if its not loaded yet, unload when the original module is unloaded, but keep the dependent module if it has been loaded earlier.
 ```
 depends_on("cuda/9.1")
 ```
-#### Prerequisite definition
+#### <a name=""></a>Prerequisite definition
 
 For expert users, we may use the `prereq()` function. If the dependent module is not loaded, loading a module with `prereq()` will error out with a message that the prerequisite module has not been loaded. This leaves the dependency handling on the user.
 
-### Module properties via labels
+### <a name="prop"></a>Module properties via labels
 
 Modules can be labelled for different groupings. [http://lmod.readthedocs.io/en/latest/145_properties.html#lmodrc-label](http://lmod.readthedocs.io/en/latest/145_properties.html#lmodrc-label) There are two default labels:
 
-#### State
+#### <a name=""></a>State
 
 `experimental`,`testing`,`obsolete`. 
 
@@ -150,7 +160,7 @@ I propose to mark older version obsolete, AND potentially hide them (list them a
 add_property("state","obsolete")
 ```
 
-#### Architecture
+#### <a name=""></a>Architecture
 
 `gpu`,`mic`,...
 
@@ -164,7 +174,7 @@ add_property("arch","gpu:host")
 ```
 
 
-### Family
+### <a name="family"></a>Family
 
 Defines that only one module in a family can be loaded at a time, e.g.
 
@@ -186,7 +196,7 @@ List of families:
 Questionable families:
 libflame, scala, cuda, julia, spark, gromacs, hoomd
 
-### Module versions and aliases
+### <a name="ver"></a>Module hiding, versions and aliases
 
 We can create shorter version or an alias for a module by a definition in `/uufs/chpc.utah.edu/sys/modulefiles/etc/rc`.  This is recommended for modules with long versions or where versions differ significantly, e.g.:
 ```
@@ -195,6 +205,11 @@ We can create shorter version or an alias for a module by a definition in `/uufs
  module-version lumerical/8.19.1466 8.19 2018a 18a
  module-alias python2 python/2.7.11
  module-alias python3 python/3.5.2
+```
+
+We can also hide older modules in the same rc file with e.g.:
+```
+ hide-version R/3.2.1
 ```
 
 We should make a habit to hide older modules as we install newer versions of programs.
