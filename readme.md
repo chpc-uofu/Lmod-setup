@@ -1,6 +1,8 @@
 # CHPCs Lmod 
+[Modules setup](#modulesetup)
+[Module file format](#moduleformat)
 
-## Modules setup
+## <a name="modulesetup"></a>Modules setup
 
 We have a specific installation strategy for Lmod in order to have different versions to co-exist in the sys branch. We follow the installation instructions at [http://lmod.readthedocs.io/en/latest/030_installing.html](http://lmod.readthedocs.io/en/latest/030_installing.html), but, with a twist.
 
@@ -192,3 +194,6 @@ We can create shorter version or an alias for a module by a definition in `/uufs
  module-alias python2 python/2.7.11
  module-alias python3 python/3.5.2
 ```
+
+We should make a habit to hide older modules as we install newer versions of programs.
+
