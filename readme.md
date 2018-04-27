@@ -56,6 +56,7 @@ Lets consider to change the following [environment variables](http://lmod.readth
 ```
 LMOD_PIN_VERSIONS - default - no - may want to set to yes to module restore the same versions of modules which were used with module save.
 LMOD_SHORTTIME - default - 2 - set to large value (86400) to prevent user spider cache to be generated - TURN THIS ON when auto cache generation is functional.
+```
 
 ## <a name="moduleformat"></a>Module file format
 
@@ -207,8 +208,8 @@ libflame, scala, cuda, julia, spark, gromacs, hoomd
 
 Command aliases are useful, and Lmod defines `set_alias()` function for that purpose. However, aliases dont get expanded in bash non-interactive (e.g. job scripts) shells. Therefore, instead of using `set_alias()` function in the module files, we should use shell functions using the `set_shell_function()` function. Furthermore, in Bash, we need to `export` the newly created shell function. Therefore, the whole alias creation of `newcmd` pointing to `oldcmd` is as follows:
 ```
-local bashStr = 'orgcmd "$@")'
-local cshStr  = "orgcmd $*`"
+local bashStr = 'orgcmd "$@"'
+local cshStr  = "orgcmd $*"
 set_shell_function("newcmd",bashStr,cshStr)
 if (myShellName() == "bash") then
  execute{cmd="export -f newcmd",modeA={"load"}}
