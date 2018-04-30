@@ -224,7 +224,7 @@ $ export -f myfunction
 $ mpirun -np 1 myfunction
  [proxy:0:0@notchpeak1] HYDU_create_process (../../utils/launch/launch.c:825): execvp error on file myfunction (No such file or directory)
 ```
-since the mpirun sh script calls `+ mpiexec.hydra -np 1 myfunction` and mpiexec.hydra somehow calls program in the argument (here `myfunction`). The system() call expands the exported shell function correctly, so mpiexec.hydra probably calls ssh or similar to launch the new remote shell with the alias as a program name which is not known in the remote shell.
+The mpirun sh script calls `+ mpiexec.hydra -np 1 myfunction` and mpiexec.hydra somehow calls program in the argument (here `myfunction`). Since the system() call expands the exported shell function correctly, mpiexec.hydra probably calls ssh or similar to launch a new remote shell. The alias is not known in the remote shell and the launch fails.
 
 ### <a name="ver"></a>Module hiding, versions and aliases
 
