@@ -40,9 +40,9 @@ $ grep -rl "lmod\/lmod" * | xargs sed -i 's/lmod\/lmod/lmod\/7.7.29/g'
 
 ### <a name="scache"></a>System spider cache
 
-We are using cache, which is being put to [`/uufs/chpc.utah.edu/sys/installdir/lmod/cache`](update_cache.sh), different location for different Lmod version (or, better to say, different locations of our module files). More info on this is at [http://lmod.readthedocs.io/en/latest/130_spider_cache.html](http://lmod.readthedocs.io/en/latest/130_spider_cache.html).
+We are using cache, which is being put to `/uufs/chpc.utah.edu/sys/installdir/lmod/cache`, different location for different Lmod version (or, better to say, different locations of our module files). More info on this is at [http://lmod.readthedocs.io/en/latest/130_spider_cache.html](http://lmod.readthedocs.io/en/latest/130_spider_cache.html).
 
-Our particular setup involves running `/uufs/chpc.utah.edu/sys/modulefiles/scripts/caching/update_cache-c7.sh`. We run a cron job, currently on `centos7.chpc.utah.edu`, as hpcapps, every 10 minutes to refresh the spider cache by:
+Our particular setup involves running [`/uufs/chpc.utah.edu/sys/modulefiles/scripts/caching/update_cache-c7.sh`](update_cache.sh). We run a cron job, currently on `centos7.chpc.utah.edu`, as hpcapps, every 10 minutes to refresh the spider cache by:
 ```
 $ crontab -e
 # Every 10 minutes: regenerate lmod module cache
