@@ -40,9 +40,21 @@ $ grep -rl "lmod\/lmod" * | xargs sed -i 's/lmod\/lmod/lmod\/7.7.29/g'
 
 ### <a name="scache"></a>System spider cache
 
-We are using cache, which is being put to `/uufs/chpc.utah.edu/sys/installdir/lmod/cache`, different location for different Lmod version (or, better to say, different locations of our module files). More info on this is at [http://lmod.readthedocs.io/en/latest/130_spider_cache.html](http://lmod.readthedocs.io/en/latest/130_spider_cache.html).
+We are using cache, which is being put to [`/uufs/chpc.utah.edu/sys/installdir/lmod/cache`](update_cache.sh), different location for different Lmod version (or, better to say, different locations of our module files). More info on this is at [http://lmod.readthedocs.io/en/latest/130_spider_cache.html](http://lmod.readthedocs.io/en/latest/130_spider_cache.html).
 
-Our particular setup involves running `/uufs/chpc.utah.edu/sys/modulefiles/scripts/caching/update_cache-c7.sh`. We should try to run this as a cron job.
+Our particular setup involves running `/uufs/chpc.utah.edu/sys/modulefiles/scripts/caching/update_cache-c7.sh`. We run a cron job, currently on `centos7.chpc.utah.edu`, as hpcapps, every 10 minutes to refresh the spider cache by:
+```
+$ crontab -e
+# Every 10 minutes: regenerate lmod module cache
+1,11,21,31,41,51 * * * * /uufs/chpc.utah.edu/common/home/hpcapps/update_cache.sh >/dev/null 2>&1
+```
+
+One thing that we missed was that cron runs in a bare environment, which resulted in Lmod not being sourced and the spider cache being incomplete. This was solved by adding the following to the script above:
+```
+if [ -z "$LMOD_VERSION" ]; then
+  source /etc/profile.d/chpc.sh
+fi
+```
 
 To run module commands without using the cache:
 ```
