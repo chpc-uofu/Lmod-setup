@@ -256,3 +256,71 @@ We can also hide older modules in the same rc file with e.g.:
 
 We should make a habit to hide older modules as we install newer versions of programs.
 
+## Usage monitoring
+
+### Setup
+
+We are roughly following instructions at [http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html).
+
+* Modify SitePackage.lua to send a message to syslog whenever module load is invoked
+  This sends a log entry to CHPCs syslog server
+
+The syslog data storage and harvesting can be done with two methods
+
+### Using SQL database
+
+This is how Lmod author has it described.
+
+#### Setup
+
+* Create and update an SQL database named `modlog` on `mysql.chpc.utah.edu`
+* On the syslog server, run a daily cron job that `/uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/databaseCron.sh` harvests the logs and updates the `modlog` database calling `/uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/store_module_data`
+
+#### Usage monitoring
+
+Lmod comes with a Python script `/uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB` which queries the database for three scenarios [described here](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html#step-7), e.g. in our case
+
+* To list counts per host
+```
+$ /uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB --sqlPattern '%plink%' counts
+
+Module path                                                        Syshost        Distinct Users
+-----------                                                        -------        --------------
+/uufs/chpc.utah.edu/sys/modulefiles/CHPC-18/Core/plink/1.09.lua    kingspeak24                 1
+/uufs/chpc.utah.edu/sys/modulefiles/CHPC-18/Core/plink/1.09.lua    kp240                       1
+...
+```
+
+* To list unique users of the module
+```
+$ /uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB --sqlPattern '%plink%' usernames
+
+Module path                                                        Syshost        User Name
+-----------                                                        -------        ---------
+/uufs/chpc.utah.edu/sys/modulefiles/CHPC-18/Core/plink/1.09.lua    lonepeak7      u0430776
+/uufs/chpc.utah.edu/sys/modulefiles/CHPC-18/Core/plink/1.09.lua    kingspeak24    u0806040
+
+```
+
+* To list modules used by a particular user
+```
+$ /uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB --sqlPattern 'u0430776' modules_used_by
+
+Module path                                                              Syshost      User Name
+-----------                                                              -------      ---------
+/uufs/chpc.utah.edu/sys/modulefiles/CHPC-18/Core/intel/2018.1.163.lua    lonepeak7    u0430776
+/uufs/chpc.utah.edu/sys/modulefiles/CHPC-18/Core/plink/1.09.lua          lonepeak7    u0430776
+
+```
+
+### Using Elasticsearch/Kibana
+
+This is still work in progress as we (Martin and Luan) are trying to figure out an efficient way to store and query the syslog data.
+
+* Open FastX connection to redwood.chpc.utah.edu (ssh -X does not work)
+* Open Firefox browser and go to `lachesis.int.chpc.utah.edu`. This is the Kibana server which talks to Elasticsearch server, `kerrigan.int.chpc.utah.edu`
+* In Kibana, hit "Discover" and then use filters to filter out the `ModuleUsageTracking` messages aloing with optional additional filter, e.g.
+```
+message:ModuleUsageTracking AND message:"module=plink"
+```
+
