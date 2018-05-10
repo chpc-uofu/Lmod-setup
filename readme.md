@@ -13,6 +13,10 @@
     * [Family](#family)
     * [Defining aliases in the module files](#alias)
     * [Module hiding, versions and aliase](#ver)
+* [Usage monitoring](#usage)
+    * [Setup](#usagesetup)
+    * [Using SQL database](#sql)
+    * [Using Elasticsearch](#elk)
 
 ## <a name="modulesetup"></a>Modules setup
 
@@ -256,9 +260,9 @@ We can also hide older modules in the same rc file with e.g.:
 
 We should make a habit to hide older modules as we install newer versions of programs.
 
-## Usage monitoring
+## <a name="usage"></a>Usage monitoring
 
-### Setup
+### <a name="usagesetup"></a>Setup
 
 We are roughly following instructions at [http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html).
 
@@ -267,7 +271,7 @@ We are roughly following instructions at [http://lmod.readthedocs.io/en/latest/3
 
 The syslog data storage and harvesting can be done with two methods
 
-### Using SQL database
+### <a name="sql"></a>Using SQL database
 
 This is how Lmod author has it described.
 
@@ -313,7 +317,7 @@ Module path                                                              Syshost
 
 ```
 
-### Using Elasticsearch/Kibana
+### <a name="elk"></a>Using Elasticsearch/Kibana
 
 This is still work in progress as we (Martin and Luan) are trying to figure out an efficient way to store and query the syslog data.
 
