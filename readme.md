@@ -273,7 +273,9 @@ The syslog data storage and harvesting can be done with two methods
 
 ### <a name="sql"></a>Using SQL database
 
-This is how Lmod author has it described.
+This is how Lmod author has it [described](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html).
+
+Note that the database search will be slower the more data will be put in the database, so, limiting the time in the search may be a good idea.
 
 #### Setup
 
@@ -282,7 +284,7 @@ This is how Lmod author has it described.
 
 #### Usage monitoring
 
-Lmod comes with a Python script `/uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB` which queries the database for three scenarios [described here](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html#step-7), e.g. in our case
+Lmod comes with a Python script `/uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB` which queries the database for three scenarios [described here](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html#step-7). We have made minor modifications to the script options to suit it to our needs.
 
 * To list counts per host
 ```
