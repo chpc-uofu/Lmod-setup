@@ -49,6 +49,7 @@ def main():
 
     bt = BeautifulTbl(tbl=resultA, gap = 4, justify = "llr")
 
+  # Don't run this, it takes a long time
   if (args.cmdA[0] == "numtimes"):
     resultA = lmod.numtimes(args.sqlPattern, args.syshost, args.startDate, args.endDate)
     num = len(resultA) - 2

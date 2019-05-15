@@ -12,6 +12,7 @@
     * [Module properties](#prop)
     * [Family](#family)
     * [Defining aliases in the module files](#alias)
+    * [Restricting module use to certain groups](#lic)
     * [Module hiding, versions and aliase](#ver)
 * [Usage monitoring](#usage)
     * [Setup](#usagesetup)
@@ -241,6 +242,30 @@ $ mpirun -np 1 myfunction
  [proxy:0:0@notchpeak1] HYDU_create_process (../../utils/launch/launch.c:825): execvp error on file myfunction (No such file or directory)
 ```
 The mpirun sh script calls `+ mpiexec.hydra -np 1 myfunction` and mpiexec.hydra somehow calls program in the argument (here `myfunction`). Since the system() call expands the exported shell function correctly, mpiexec.hydra probably calls ssh or similar to launch a new remote shell. The alias is not known in the remote shell and the launch fails.
+
+
+### <a name="lic"></a>Restricting module use to certain groups
+
+Licensing resctriction to certain groups or using different license information for different groups is done using the ```required_group``` hook from ```libexec/SitePackages.lua```. An example of its usage is below:
+```
+local err_message="To use this module you must be in a particular group\n" ..
+                  "Please contact issues@chpc.utah.edu to find out more\n"
+
+local found = required_group("starccmsub2") or required_group("starccmsub1") or required_group("starccm")
+
+if (not found) then
+   LmodError(err_message)
+end
+
+-- setup for USU licensing
+local usu = required_group("usu")
+if (usu) then
+  setenv("CDLMD_LICENSE_FILE","17020@flexnet.it.usu.edu")
+--  setenv("CDLMD_LICENSE_FILE","17000@elicense.eng.usu.edu")
+else
+  setenv("CDLMD_LICENSE_FILE","/uufs/chpc.utah.edu/sys/installdir/star-ccm+/license3_17.dat")
+end
+```
 
 ### <a name="ver"></a>Module hiding, versions and aliases
 
