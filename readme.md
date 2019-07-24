@@ -300,7 +300,9 @@ Lmod comes with a script [sh_to_modulefile](https://lmod.readthedocs.io/en/lates
 
 If the init script sets aliases and/or shell functions, there are two ways to deal with that. One of them is to encode all the aliases and shell functions in the module file, which can get quite complicated. We feel that an easier way is to call the init script from the module file to initialize the environment, and then unset all the aliases and shell function during module unload.
 
-To find out what is being set, run `env` before and after the init script sourcing, save into a file and `gvim -d` them to see the difference. For aliases, do the same with the `alias` command. For shell function, use `declare -F` in bash. 
+To find out what is being set, for environment variables run `env` before and after the init script sourcing, save into a file and `gvim -d` them to see the difference. For aliases, do the same with the `alias` command. For shell function, use `declare -F` in bash. 
+
+Use `unsetenv` or `unset` for environment variables in tcsh and bash, `unalias` to unset aliases and `unset -f` to unset a bash shell function.
 
 For example, in the [anaconda3](2019.03.lua) module, to source the environment, we simply
 ```
