@@ -17,6 +17,7 @@
     * [Modules for complicated initialization scripts](#shinit)
         * [Autogenerate lua module file](#autog)
         * [Source init script in the module file and unset the variables at module unload](#source)
+    * [Python and Anaconda Virtual Environments](pve)
 * [Usage monitoring](#usage)
     * [Setup](#usagesetup)
     * [Using SQL database](#sql)
