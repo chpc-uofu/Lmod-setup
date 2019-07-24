@@ -34,6 +34,7 @@ $ touch /uufs/chpc.utah.edu/sys/installdir/lmod/systemfiles/7.7-c7/system.txt
 $ mkdir -p /uufs/chpc.utah.edu/sys/installdir/lmod/cache/7.7-c7
 ```
 * In srcdir, configure and preinstall:
+```
 $ ./configure --prefix=/uufs/chpc.utah.edu/sys/installdir --with-module-root-path=/uufs/chpc.utah.edu/sys/modulefiles/CHPC-c7 --with-spiderCacheDir=/uufs/chpc.utah.edu/sys/installdir/lmod/cache/7.7-c7 --with-updateSystemFn=/uufs/chpc.utah.edu/sys/installdir/lmod/systemfiles/7.7-c7/system.txt --with-colorize=YES --with-tcl=YES --with-autoSwap=YES --with-useDotFiles=YES --with-mpathSearch=yes
 $ make pre-install
 ```
