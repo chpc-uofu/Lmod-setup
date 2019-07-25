@@ -44,6 +44,7 @@ $ make pre-install
 $ grep -rl "lmod\/lmod" * | xargs sed -i 's/lmod\/lmod/lmod\/7.7.29/g'
 ```
 * Modify `libexec/SitePackage.lua` - use the file from older version to add hooks for module load logging and for licensed programs checks
+* Modify `init/lmodrc.lua` - to add the `host` module property - this is used for programs built both for GPU and CPU (host), e.g. vasp/5.4.4
 * Test the new Lmod installation - this requires unloading the existing Lmod and starting the new one in an user shell. We have examples of scripts that do thia, e.g. `/uufs/chpc.utah.edu/sys/modulefiles/scripts/switch_to_18.csh`. Dont forget to source the file so that changes take effect.
 * When ready to deploy, modify `/uufs/chpc.utah.edu/sys/etc/profile.d/module.[csh,sh]` to change the Lmod version to source
 
