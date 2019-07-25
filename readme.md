@@ -65,6 +65,8 @@ if [ -z "$LMOD_VERSION" ]; then
 fi
 ```
 
+We are also running a monitoring script to check on updates of the spider cache files to make sure the cron update is running. If the cache files are older than 13.3 hours, we send alert to operations. The file that is being checked is `/uufs/chpc.utah.edu/sys/installdir/lmod/cache/std/spiderT.lua`.
+
 To run module commands without using the cache:
 ```
 $ module --ignore_cache avail
