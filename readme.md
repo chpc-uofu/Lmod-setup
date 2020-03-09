@@ -145,10 +145,12 @@ We usually need to define PATH and other variables, and, when practical we shoul
 prepend_path("PATH",pathJoin(base, "/bin"))
 prepend_path("LD_LIBRARY_PATH",pathJoin(base,"/lib"))
 prepend_path("MANPATH",pathJoin(base,"/share/man/man3"))
+prepend_path("PKG_CONFIG_PATH", pathJoin(base,"lib/pkgconfig"))
 setenv("NETCDFC",base)
 setenv("NETCDFC_INCDIR",pathJoin(base,"/include"))
 setenv("NETCDFC_LIBDIR",pathJoin(base,"/lib"))
 ```
+If the package is a library, we should add the LD_LIBRARY_PATH and possibly also PKG_CONFIG_PATH, if the package contains ```pkgconfig``` information.
 
 ## <a name="moduleformatother"></a>Other module file format features
 
