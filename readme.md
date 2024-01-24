@@ -369,6 +369,30 @@ Note that the database search will be slower the more data will be put in the da
 
 #### Usage monitoring
 
+##### Setup as of early 2024
+
+Data from above get ingested into a database that's located in `/uufs/chpc.utah.edu/common/home/chpc-data/module-tracking`. One can use SQL commands to query the database, as:
+```
+cd /uufs/chpc.utah.edu/common/home/chpc-data/module-tracking
+sqlite3 module-usage-tracking.db
+```
+Then run `.header on` to enable headers on output tables.
+
+Example queries:
+### Analyze usage of different versions of the same module (modify date range as desired)
+```sql
+select module, version, sum(count) from module_load where date between '2024-01-01' and '2025-01-01' and module='alphafold' group by module, version order by version desc;
+```
+
+### Look at details of recent module loads (who, where, when, what)
+```sql
+select * from module_load where date>='2024-01-01' and module='alphafold';
+```
+
+##### Older setup
+
+The scripts below may still work or may need a minimal change to get working.
+
 Lmod comes with a Python script `/uufs/chpc.utah.edu/sys/srcdir/lmod/7.7.29/contrib/tracking_module_usage/analyzeLmodDB` which queries the database for three scenarios [described here](http://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html#step-7). We have made minor modifications to the script options to suit it to our needs.
 
 * To list counts per host
